@@ -69,7 +69,7 @@ public class Blackjack {
     public static void generateDeck(){
         
         char suit[] = {(char) 3,(char) 4,(char) 5,(char) 6};
-        String rank[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9","X", "J", "Q", "K"};
+        String rank[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9","10", "J", "Q", "K"};
 
         for(int n = 0; n < 52; n++){
             String Suit = suit[n / 13] + "";
