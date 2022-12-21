@@ -2,12 +2,7 @@ import java.util.Scanner;
 
 public class Blackjack {
     
-    static String[] deck = {"HA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", 
-        "DA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", 
-        "CA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", 
-        "SA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK"};
-    // Due to the limitation of the netbeans compiler we have to represent the suit as a character (this is why VS code better /s)
-    // H = Heart, D = Diamonf, C = Clover/Club S = Spade
+    static String[] deck = new deck[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
     
     public static void main(String[] args){
@@ -16,7 +11,8 @@ public class Blackjack {
         String[] dealerCard = new String[2];
         int handSum = 0, houseSum = 0, myAce = 0, dAce = 0;
         Scanner sc = new Scanner(System.in);
-
+        
+        generateDeck(); //Generate the deck
         ShuffleDeck();  //The cards are shuffle at the beginning of the game
 
         //The "dealer" dealt two cards for the player at the beginning of the game
@@ -69,6 +65,18 @@ public class Blackjack {
 
         sc.close();
     }
+    
+    public static void generateDeck(){
+        
+        char suit[] = {(char) 3,(char) 4,(char) 5,(char) 6};
+        String rank[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9","X", "J", "Q", "K"};
+
+        for(int n = 0; n < 52; n++){
+            String Suit = suit[n / 13] + "";
+            deck[n] = Suit.toString() + rank[n % 13];
+        }
+    }
+
 
     public static void ShuffleDeck(){
 
