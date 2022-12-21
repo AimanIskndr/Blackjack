@@ -2,10 +2,10 @@ import java.util.Scanner;
 
 public class Blackjack {
     
-    static String[] deck = {"HA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "HX", "HJ", "HQ", "HK", 
-        "DA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DX", "DJ", "DQ", "DK", 
-        "CA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CX", "CJ", "CQ", "CK", 
-        "SA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "SX", "SJ", "SQ", "SK"};
+    static String[] deck = {"HA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", 
+        "DA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", 
+        "CA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", 
+        "SA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK"};
     // Due to the limitation of the netbeans compiler we have to represent the suit as a character (this is why VS code better /s)
     // H = Heart, D = Diamonf, C = Clover/Club S = Spade
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
@@ -92,7 +92,6 @@ public class Blackjack {
         int sum = 0;
         /*
         Number card (2-10) value are taken literally from the card.
-        A sidenote, X is use in this program to represent 10. X = 10 (in roman numeral system)
         All court card (or face card which ever you prefer to call them) are counted as 10
         Court card = Jack, Queen and King
         Ace is a wildcard, it can be either counted as 11 or 1
@@ -100,7 +99,7 @@ public class Blackjack {
         */
         switch (cVal) {
             case 'A': sum += 11; break;
-            case 'X':
+            case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q':
             case 'K': sum +=10; break;
