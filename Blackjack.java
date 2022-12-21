@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Blackjack {
     
-    static String[] deck = new deck[52];
+    static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
     
     public static void main(String[] args){
