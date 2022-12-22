@@ -7,7 +7,7 @@ public class Blackjack {
         "CA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", 
         "SA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK"};
     // Due to the limitation of the netbeans compiler we have to represent the suit as a character (this is why VS code better /s)
-    // H = Heart, D = Diamonf, C = Clover/Club S = Spade
+    // H = Heart, D = Diamond, C = Clover/Club S = Spade
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
     
     public static void main(String[] args){
@@ -199,6 +199,5 @@ public class Blackjack {
 
         else if((playerHand < dealerHand) && dealerHand <= 21)
             System.out.println("You lost.");
-
     }
 }
