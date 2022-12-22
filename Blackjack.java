@@ -12,9 +12,10 @@ public class Blackjack {
     
     public static void main(String[] args){
         
-        String[] playerCard = new String[2];
-        String[] dealerCard = new String[2];
-        int handSum = 0, houseSum = 0, myAce = 0, dAce = 0;
+        String[] playerCard = new String[14];
+        String[] dealerCard = new String[14];
+        int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
+        //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
         Scanner sc = new Scanner(System.in);
 
         ShuffleDeck();  //The cards are shuffle at the beginning of the game
@@ -40,16 +41,45 @@ public class Blackjack {
         System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
         
         //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
-        if(handSum != 21)
-            handSum = playerRound(handSum, myAce);
-        
+
+        while(handSum != 21 && Hit()){
+                
+            playerCard[np] = giveCard();
+            if(isAce(playerCard[np]))
+                myAce++;
+            
+            System.out.println("You are dealt " + playerCard[np]);
+            handSum += handCount(playerCard[np].charAt(1));
+
+            while(handSum > 21 && myAce != 0){
+                handSum = handCount(handSum);
+                myAce--;
+            }
+
+            np++;
+        }
+
         //Dealer finally reveal his hand after the player's round ended
-        System.out.printf("Dealer's card: %s %s\n", dealerCard[0], dealerCard[1]);
+        System.out.printf("\nDealer's card: %s %s\n", dealerCard[0], dealerCard[1]);
         
         //As per rule, if the dealer's hand is less than 16
         //the dealer is obligated to take another card until its hand reach at least 17
-        if(houseSum <= 16){
-            houseSum = dealerRound(houseSum, dAce);
+        if(houseSum <= 16)
+            System.out.print("Dealer take card(s): ");
+
+        while(houseSum <= 16){
+            dealerCard[nd] = giveCard();
+            if(isAce(dealerCard[nd]))
+                dAce++;
+                
+            houseSum += handCount(dealerCard[nd].charAt(1));
+            System.out.print(dealerCard[nd] + " ");
+            while(houseSum > 21 && dAce != 0){
+                houseSum = handCount(houseSum);
+                dAce--;
+            }
+
+            nd++;
         }
 
         //Show the total value for Player hand and the Dealer Hand 
@@ -81,7 +111,7 @@ public class Blackjack {
     }
     
     public static int handCount(char cVal){
-        int sum = 0;
+        int val;
         /*
         Number card (2-10) value are taken literally from the card.
         All court card (or face card which ever you prefer to call them) are counted as 10
@@ -90,88 +120,45 @@ public class Blackjack {
         but by default, Ace is always counted as 11.
         */
         switch (cVal) {
-            case 'A': sum += 11; break;
+            case 'A': val = 11; break;
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q':
-            case 'K': sum +=10; break;
-            default: sum += (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
+            case 'K': val =10; break;
+            default: val = (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
                 break;
         }
         
-        return sum;
+        return val;
     }
 
-    public static int playerRound (int currSum, int ace){
+    public static int handCount(int sum){
+        
+        return sum - 10;
+    }
 
-        int hit; 
-        String nCard;
+    public static boolean Hit(){
 
+        int opt;
         Scanner sc = new Scanner(System.in);
+        System.out.printf("\nDo you want to hit\n");
+        System.out.println("0. Stand    1. Hit");
 
-        //Hit = take another card
-        //Stand = you are satisfy with you hand and want to end your round
         do{
-            System.out.printf("\nDo you want to hit\n");
-            System.out.println("0. Stand    1. Hit");
+            opt = sc.nextInt();
 
-            hit = sc.nextInt();
-
-            if(hit == 1){
-                
-                nCard = giveCard();
-
-                if(isAce(nCard))
-                    ace++;
-
-                currSum += handCount(nCard.charAt(1));
-
-                System.out.println("You are handed " + nCard);
+            switch (opt) {
+                case 1: return true;
+                case 0: return false;
+                default:
+                    continue;
             }
-        }while(hit == 1);
 
-        //in case of the player hand go over 21 and the player happened to have Ace card
-        //Player's Ace value will be converted to 1.
-        while(currSum > 21 && ace != 0){
-            currSum-= 10;
-            ace--;
-        }
-
+        }while(opt != 1 || opt != 0);
+        
         sc.close();
 
-        return currSum;
-    }
-
-    public static int dealerRound(int currSum, int ace) {
-        
-        String Card;
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.print("Dealer take card(s): ");
-
-        //As stated above, while dealer's hand is under 16
-        //Dealer is obligated to take another card
-        while(currSum <= 16 || (currSum > 21 && ace > 0)){
-            //take a card again
-            
-            Card = giveCard();
-            System.out.printf("%s ", Card);
-            if(isAce(Card)
-                ace++;
-
-            currSum += handCount(Card.charAt(1));
-
-            //deduct Ace card value (if have) to 1 to prevent the hand going over 21
-            if(currSum > 21 && ace != 0){
-                    currSum-= 10;
-                    ace--;
-                }
-        }
-
-        input.close();
-
-        return currSum;
+        return false;
     }
 
     public static void result(int playerHand, int dealerHand) {
