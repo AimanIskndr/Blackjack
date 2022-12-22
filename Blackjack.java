@@ -21,19 +21,16 @@ public class Blackjack {
 
         //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
 
-        for(int i = 0; i < 2; i++){
-            String temp;
+        for(int i = 0; i < 2; i++){  
             
             playerCard[i] = giveCard();
-            temp = playerCard[i];
-            if(temp.charAt(1) == 'A')
+            if(isAce(playerCard[i]))
                 myAce++;
                 
             handSum += handCount(playerCard[i].charAt(1));
             
-            dealerCard[i] = giveCard();
-            temp = dealerCard[i];
-            if(temp.charAt(1) == 'A')
+            dealerCard[i] = giveCard();           
+            if(isAce(dealerCard[i]))
                 dAce++;
 
             houseSum += handCount(dealerCard[i].charAt(1));
@@ -124,7 +121,7 @@ public class Blackjack {
                 
                 nCard = giveCard();
 
-                if(nCard.charAt(hit) == 'A')
+                if(isAce(nCard))
                     ace++;
 
                 currSum += handCount(nCard.charAt(1));
@@ -199,5 +196,11 @@ public class Blackjack {
 
         else if((playerHand < dealerHand) && dealerHand <= 21)
             System.out.println("You lost.");
+    }
+    public static boolean isAce( String card) {
+        if (card.charAt(1)=='A'){
+            return true;
+            }
+        return false;
     }
 }
