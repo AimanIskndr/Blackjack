@@ -36,8 +36,8 @@ public class Blackjack {
             houseSum += handCount(dealerCard[i].charAt(1));
         }
 
-        System.out.printf("Player's card: %s %s", playerCard[0], playerCard[1]); //The two cards dealt are shown to the player
-        System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player as per rule
+        System.out.printf("Player's card: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
+        System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
         
         //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
         if(handSum != 21)
@@ -47,7 +47,7 @@ public class Blackjack {
         System.out.printf("Dealer's card: %s %s\n", dealerCard[0], dealerCard[1]);
         
         //As per rule, if the dealer's hand is less than 16
-        //the house is obligated to take another card until its hand reach at least 17
+        //the dealer is obligated to take another card until its hand reach at least 17
         if(houseSum <= 16){
             houseSum = dealerRound(houseSum, dAce);
         }
@@ -144,9 +144,9 @@ public class Blackjack {
 
     public static int dealerRound(int currSum, int ace) {
         
-        String nCard;
+        String Card;
 
-        Scanner sc = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
 
         System.out.print("Dealer take card(s): ");
 
@@ -155,12 +155,12 @@ public class Blackjack {
         while(currSum <= 16 || (currSum > 21 && ace > 0)){
             //take a card again
             
-            nCard = giveCard();
-            System.out.printf("%s ", nCard);
-            if(nCard.charAt(1) == 'A')
+            Card = giveCard();
+            System.out.printf("%s ", Card);
+            if(isAce(Card)
                 ace++;
 
-            currSum += handCount(nCard.charAt(1));
+            currSum += handCount(Card.charAt(1));
 
             //deduct Ace card value (if have) to 1 to prevent the hand going over 21
             if(currSum > 21 && ace != 0){
@@ -169,7 +169,7 @@ public class Blackjack {
                 }
         }
 
-        sc.close();
+        input.close();
 
         return currSum;
     }
