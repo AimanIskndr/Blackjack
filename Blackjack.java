@@ -19,33 +19,28 @@ public class Blackjack {
 
         ShuffleDeck();  //The cards are shuffle at the beginning of the game
 
-        //The "dealer" dealt two cards for the player at the beginning of the game
-        System.out.print("Player's card: ");
+        //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
+
         for(int i = 0; i < 2; i++){
+            String temp;
             
             playerCard[i] = giveCard();
-            String tempCard = playerCard[i];
-            if(tempCard.charAt(1) == 'A')
+            temp = playerCard[i];
+            if(temp.charAt(1) == 'A')
                 myAce++;
-
-            handSum += handCount(tempCard.charAt(1));
-        }
-
-        System.out.printf("%s %s", playerCard[0], playerCard[1]); //The two cards dealt are shown to the player
-
-        //The "dealer" are also dealt two cards at the beginning of the game
-        System.out.printf("\nDealer's card: ");
-        for(int i = 0; i < 2; i++){
+                
+            handSum += handCount(playerCard[i].charAt(1));
             
             dealerCard[i] = giveCard();
-            String tempCard = dealerCard[i];
-            if(tempCard.charAt(1) == 'A')
+            temp = dealerCard[i];
+            if(temp.charAt(1) == 'A')
                 dAce++;
 
-            houseSum += handCount(tempCard.charAt(1));
+            houseSum += handCount(dealerCard[i].charAt(1));
         }
 
-        System.out.printf("%s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player as per rule
+        System.out.printf("Player's card: %s %s", playerCard[0], playerCard[1]); //The two cards dealt are shown to the player
+        System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player as per rule
         
         //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
         if(handSum != 21)
@@ -72,7 +67,7 @@ public class Blackjack {
 
     public static void ShuffleDeck(){
 
-        //Use bogo sort to shuffle the deck
+        //Use monkey sort to shuffle the deck
         for(int j = 0; j < 52; j++){
             int randId = (int) (Math.random() * 52);
 
