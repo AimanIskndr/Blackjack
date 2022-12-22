@@ -1,71 +1,98 @@
 import java.util.Scanner;
 
-public class Blackjack {
+public class Blackjack{
     
     static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
     
     public static void main(String[] args){
         
-        String[] playerCard = new String[2];
-        String[] dealerCard = new String[2];
-        int handSum = 0, houseSum = 0, myAce = 0, dAce = 0;
+        String[] playerCard = new String[14];
+        String[] dealerCard = new String[14];
+        int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
+        //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
         Scanner sc = new Scanner(System.in);
-        
-        generateDeck(); //Generate the deck
+
+        generateDeck();
         ShuffleDeck();  //The cards are shuffle at the beginning of the game
 
-        //The "dealer" dealt two cards for the player at the beginning of the game
-        System.out.print("Player's card: ");
-        for(int i = 0; i < 2; i++){
+        //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
+
+        for(int i = 0; i < 2; i++){  
             
             playerCard[i] = giveCard();
-            String tempCard = playerCard[i];
-            if(tempCard.charAt(1) == 'A')
+            if(isAce(playerCard[i]))
                 myAce++;
-
-            handSum += handCount(tempCard.charAt(1));
-        }
-
-        System.out.printf("%s %s", playerCard[0], playerCard[1]); //The two cards dealt are shown to the player
-
-        //The "dealer" are also dealt two cards at the beginning of the game
-        System.out.printf("\nDealer's card: ");
-        for(int i = 0; i < 2; i++){
+                
+            handSum += handCount(playerCard[i].charAt(1));
             
-            dealerCard[i] = giveCard();
-            String tempCard = dealerCard[i];
-            if(tempCard.charAt(1) == 'A')
+            dealerCard[i] = giveCard();           
+            if(isAce(dealerCard[i]))
                 dAce++;
 
-            houseSum += handCount(tempCard.charAt(1));
+            houseSum += handCount(dealerCard[i].charAt(1));
         }
 
-        System.out.printf("%s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player as per rule
+        System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
+        System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
         
         //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
-        if(handSum != 21)
-            handSum = playerRound(handSum, myAce);
-        
-        //Dealer finally reveal his hand after the player's round ended
-        System.out.printf("Dealer's card: %s %s\n", dealerCard[0], dealerCard[1]);
-        
-        //As per rule, if the dealer's hand is less than 16
-        //the house is obligated to take another card until its hand reach at least 17
-        if(houseSum <= 16){
-            houseSum = dealerRound(houseSum, dAce);
+
+        while(handSum != 21 && Hit()){
+                
+            playerCard[np] = giveCard();
+            if(isAce(playerCard[np]))
+                myAce++;
+            
+            System.out.println("You are dealt " + playerCard[np]);
+            handSum += handCount(playerCard[np].charAt(1));
+
+            while(handSum > 21 && myAce != 0){
+                handSum = handCount(handSum);
+                myAce--;
+            }
+
+            np++;
         }
 
-        //Show the total value for Player hand and the Dealer Hand 
-        System.out.printf("\nPlayer hand = %d\n" ,handSum);
-        System.out.printf("Dealer hand = %d\n" ,houseSum);
+        //Dealer finally reveal his hand after the player's round ended
+        System.out.printf("\nDealer's cards: %s %s\n", dealerCard[0], dealerCard[1]);
+        
+        //As per rule, if the dealer's hand is less than 16
+        //the dealer is obligated to take another card until its hand reach at least 17
+        if(houseSum <= 16)
+            System.out.print("Dealer take card(s): ");
 
-        //Compare the value and print out the result
+        while(houseSum <= 16){
+            dealerCard[nd] = giveCard();
+            if(isAce(dealerCard[nd]))
+                dAce++;
+                
+            houseSum += handCount(dealerCard[nd].charAt(1));
+            System.out.print(dealerCard[nd] + " ");
+            while(houseSum > 21 && dAce != 0){
+                houseSum = handCount(houseSum);
+                dAce--;
+            }
+
+            nd++;
+        }
+
+        //Show the total value for Player hand and the Dealer Hands
+
+        System.out.printf("\n\nPlayer's hand: ");
+        displayDeck(playerCard, np);
+        System.out.printf("\nPlayer total = %d\n" ,handSum);
+        
+        System.out.printf("\nDealer's hand: ");
+        displayDeck(dealerCard, nd);
+        System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
+        
         result(handSum, houseSum);
 
         sc.close();
     }
-    
+
     public static void generateDeck(){
         
         char suit[] = {(char) 3,(char) 4,(char) 5,(char) 6};
@@ -77,10 +104,9 @@ public class Blackjack {
         }
     }
 
-
     public static void ShuffleDeck(){
 
-        //Use bogo sort to shuffle the deck
+        //Use monkey sort to shuffle the deck
         for(int j = 0; j < 52; j++){
             int randId = (int) (Math.random() * 52);
 
@@ -97,7 +123,7 @@ public class Blackjack {
     }
     
     public static int handCount(char cVal){
-        int sum = 0;
+        int val;
         /*
         Number card (2-10) value are taken literally from the card.
         All court card (or face card which ever you prefer to call them) are counted as 10
@@ -105,89 +131,46 @@ public class Blackjack {
         Ace is a wildcard, it can be either counted as 11 or 1
         but by default, Ace is always counted as 11.
         */
-        switch (cVal) {
-            case 'A': sum += 11; break;
+        switch (cVal){
+            case 'A': val = 11; break;
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q':
-            case 'K': sum +=10; break;
-            default: sum += (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
+            case 'K': val =10; break;
+            default: val = (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
                 break;
         }
         
-        return sum;
+        return val;
     }
 
-    public static int playerRound (int currSum, int ace){
-
-        int hit; 
-        String nCard;
-
-        Scanner sc = new Scanner(System.in);
-
-        //Hit = take another card
-        //Stand = you are satisfy with you hand and want to end your round
-        do{
-            System.out.printf("\nDo you want to hit\n");
-            System.out.println("0. Stand    1. Hit");
-
-            hit = sc.nextInt();
-
-            if(hit == 1){
-                
-                nCard = giveCard();
-
-                if(nCard.charAt(hit) == 'A')
-                    ace++;
-
-                currSum += handCount(nCard.charAt(1));
-
-                System.out.println("You are handed " + nCard);
-            }
-        }while(hit == 1);
-
-        //in case of the player hand go over 21 and the player happened to have Ace card
-        //Player's Ace value will be converted to 1.
-        while(currSum > 21 && ace != 0){
-            currSum-= 10;
-            ace--;
-        }
-
-        sc.close();
-
-        return currSum;
-    }
-
-    public static int dealerRound(int currSum, int ace) {
+    public static int handCount(int sum){
         
-        String nCard;
+        return sum - 10;
+    }
 
+    public static boolean Hit(){
+
+        int opt;
         Scanner sc = new Scanner(System.in);
+        System.out.printf("\nDo you want to hit\n");
+        System.out.println("0. Stand    1. Hit");
 
-        System.out.print("Dealer take card(s): ");
+        do{
+            opt = sc.nextInt();
 
-        //As stated above, while dealer's hand is under 16
-        //Dealer is obligated to take another card
-        while(currSum <= 16 || (currSum > 21 && ace > 0)){
-            //take a card again
-            
-            nCard = giveCard();
-            System.out.printf("%s ", nCard);
-            if(nCard.charAt(1) == 'A')
-                ace++;
+            switch (opt) {
+                case 1: return true;
+                case 0: return false;
+                default:
+                    continue;
+            }
 
-            currSum += handCount(nCard.charAt(1));
-
-            //deduct Ace card value (if have) to 1 to prevent the hand going over 21
-            if(currSum > 21 && ace != 0){
-                    currSum-= 10;
-                    ace--;
-                }
-        }
-
+        }while(opt != 1 || opt != 0);
+        
         sc.close();
 
-        return currSum;
+        return false;
     }
 
     public static void result(int playerHand, int dealerHand) {
@@ -205,13 +188,26 @@ public class Blackjack {
             System.out.println("You bust");
 
         else if(dealerHand == playerHand)
-            System.out.println("Tie...");
+            System.out.println("Game ended with a tie");
 
         else if((playerHand > dealerHand) && playerHand <= 21)
             System.out.println("You won!");
 
         else if((playerHand < dealerHand) && dealerHand <= 21)
             System.out.println("You lost.");
+    }
 
+    public static boolean isAce( String card) {
+        if (card.charAt(1)=='A'){
+            return true;
+            }
+        return false;
+    }
+
+    private static void displayDeck(String[] cards, int num){
+
+        for(int i = 0; i < num; i++){
+            System.out.printf("%s ", cards[i]);
+        }
     }
 }
