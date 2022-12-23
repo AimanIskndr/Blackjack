@@ -83,9 +83,14 @@ public class Blackjack {
         }
 
         //Show the total value for Player hand and the Dealer Hand 
-        System.out.printf("\nPlayer hand = %d\n" ,handSum);
-        System.out.printf("Dealer hand = %d\n" ,houseSum);
-
+        System.out.printf("\n\nPlayer's cards: ");
+        displayHand(playerCard, np);
+        System.out.printf("Player total = %d\n" ,handSum);
+        
+        System.out.printf("\nDealer's cards: ");
+        displayHand(dealerCard, nd);
+        System.out.printf("Dealer total = %d\n" ,houseSum);
+        
         //Compare the value and print out the result
         result(handSum, houseSum);
 
@@ -159,6 +164,14 @@ public class Blackjack {
         sc.close();
 
         return false;
+    }
+    
+    public static void displayHand(String[] deck, int n){
+        for(int i=0;i<n;i++){
+            System.out.printf("%s ", deck[i]);
+            
+        }
+        System.out.printf("\n");
     }
 
     public static void result(int playerHand, int dealerHand) {
