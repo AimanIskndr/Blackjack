@@ -37,7 +37,7 @@ public class Blackjack {
             houseSum += handCount(dealerCard[i].charAt(1));
         }
 
-        System.out.printf("Player's card: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
+        System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
         System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
         
         //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
@@ -60,7 +60,7 @@ public class Blackjack {
         }
 
         //Dealer finally reveal his hand after the player's round ended
-        System.out.printf("\nDealer's card: %s %s\n", dealerCard[0], dealerCard[1]);
+        System.out.printf("\nDealer's cards: %s %s\n", dealerCard[0], dealerCard[1]);
         
         //As per rule, if the dealer's hand is less than 16
         //the dealer is obligated to take another card until its hand reach at least 17
@@ -82,16 +82,16 @@ public class Blackjack {
             nd++;
         }
 
-        //Show the total value for Player hand and the Dealer Hand 
-        System.out.printf("\n\nPlayer's cards: ");
+        //Show the total value for Player hand and the Dealer Hands
+
+        System.out.printf("\n\nPlayer's hand: ");
         displayHand(playerCard, np);
-        System.out.printf("Player total = %d\n" ,handSum);
+        System.out.printf("\nPlayer total = %d\n" ,handSum);
         
-        System.out.printf("\nDealer's cards: ");
+        System.out.printf("\nDealer's hand: ");
         displayHand(dealerCard, nd);
-        System.out.printf("Dealer total = %d\n" ,houseSum);
+        System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
         
-        //Compare the value and print out the result
         result(handSum, houseSum);
 
         sc.close();
@@ -124,7 +124,7 @@ public class Blackjack {
         Ace is a wildcard, it can be either counted as 11 or 1
         but by default, Ace is always counted as 11.
         */
-        switch (cVal) {
+        switch (cVal){
             case 'A': val = 11; break;
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
@@ -165,13 +165,12 @@ public class Blackjack {
 
         return false;
     }
-    
-    public static void displayHand(String[] deck, int n){
-        for(int i=0;i<n;i++){
-            System.out.printf("%s ", deck[i]);
-            
+
+    private static void displayHand(String[] cards, int num){
+
+        for(int i = 0; i < num; i++){
+            System.out.printf("%s ", cards[i]);
         }
-        System.out.printf("\n");
     }
 
     public static void result(int playerHand, int dealerHand) {
@@ -189,7 +188,7 @@ public class Blackjack {
             System.out.println("You bust");
 
         else if(dealerHand == playerHand)
-            System.out.println("Tie...");
+            System.out.println("Game ended with a tie");
 
         else if((playerHand > dealerHand) && playerHand <= 21)
             System.out.println("You won!");
@@ -197,6 +196,7 @@ public class Blackjack {
         else if((playerHand < dealerHand) && dealerHand <= 21)
             System.out.println("You lost.");
     }
+
     public static boolean isAce( String card) {
         if (card.charAt(1)=='A'){
             return true;
