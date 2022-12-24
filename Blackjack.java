@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class BlackjackAlphaVer{
+public class Blackjack{
     
     static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
@@ -8,8 +8,15 @@ public class BlackjackAlphaVer{
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
-        while(true){  //infinite loop
+
+        System.out.println("How many rounds do you want to play");
+        int round = sc.nextInt();
+        double[][] score = new double[2][round];
+
+        for(int game = 0; game < round; game++){ 
             
+            System.out.printf("\nGame #%d\n", game + 1);
+
             String[] playerCard = new String[14];
             String[] dealerCard = new String[14];
             int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
@@ -74,7 +81,7 @@ public class BlackjackAlphaVer{
                     houseSum = handCount(houseSum);
                     dAce--;
                 }
-    
+
                 nd++;
             }
     
@@ -88,19 +95,12 @@ public class BlackjackAlphaVer{
             displayDeck(dealerCard, nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             
-            result(handSum, houseSum);
+            result(handSum, houseSum, score, np, game);
+            count = 52;
             
-            System.out.println("Do you want to continue playing? (yes/no)");
-            String answer = sc.nextLine();
-            if(answer.charAt(0) == 'y' || answer.charAt(0) == 'Y'){
-                count = 52;
-                System.out.println("");
-                continue;
-            }
-
-            else
-                break;
         }
+
+        tallyScore(score, round);
 
         sc.close();
             
@@ -186,28 +186,49 @@ public class BlackjackAlphaVer{
         return false;
     }
 
-    public static void result(int playerHand, int dealerHand) {
+    public static void result(int playerHand, int dealerHand, double[][] score, int nc, int g) {
         //Compared the player hand and the dealer hand and print out the result
-        if(playerHand == 21 && dealerHand != 21)
-            System.out.println("Blackjack");
+        if(playerHand == 21 && dealerHand != 21 && nc == 2){
+            System.out.println("Blackjack!\n");
+            score[0][g] = 2.5;
+            score[1][g] = -1.5;
+        }
 
-        else if(dealerHand > 21 && playerHand > 21)
+        else if(dealerHand > 21 && playerHand > 21){
             System.out.println("You both bust.");
+            score[0][g] = 1;
+            score[1][g] = 0;
+        }
 
-        else if(dealerHand > 21 && playerHand <= 21)
+        else if(dealerHand > 21 && playerHand <= 21){
             System.out.println("You won, the dealer bust.");
+            score[0][g] = 2;
+            score[1][g] = -1;
+        }
 
-        else if(dealerHand <= 21 && playerHand > 21)
+        else if(dealerHand <= 21 && playerHand > 21){
             System.out.println("You bust");
+            score[0][g] = -1;
+            score[1][g] = 1;
+        }
 
-        else if(dealerHand == playerHand)
+        else if(dealerHand == playerHand){
             System.out.println("Game ended with a tie");
+            score[0][g] = 1;
+            score[1][g] = 0;
+        }
 
-        else if((playerHand > dealerHand) && playerHand <= 21)
+        else if(((playerHand > dealerHand) && playerHand <= 21) || playerHand == 21 && dealerHand != 21){
             System.out.println("You won!");
+            score[0][g] = 2;
+            score[1][g] = -1;
+        }
 
-        else if((playerHand < dealerHand) && dealerHand <= 21)
+        else if((playerHand < dealerHand) && dealerHand <= 21){
             System.out.println("You lost.");
+            score[0][g] = -1;
+            score[1][g] = 1;
+        }
     }
 
     public static boolean isAce( String card) {
@@ -222,5 +243,19 @@ public class BlackjackAlphaVer{
         for(int i = 0; i < num; i++){
             System.out.printf("%s ", cards[i]);
         }
+    }
+
+    private static void tallyScore(double[][] score, int r){
+        
+        int playerScore = 0;
+        int dealerScore = 0;
+
+        for(int i = 0; i < r; i++){
+            playerScore += score[0][i];
+            dealerScore += score[1][i];
+        }
+
+        System.out.println("\nPlayer's score: " + playerScore);
+        System.out.println("Dealer's score: " + dealerScore);
     }
 }
