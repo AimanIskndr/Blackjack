@@ -1,9 +1,22 @@
-Blackjack is a popular card game that is played with a deck of 52 cards. In this code, an array named `deck` is initialized to store 52 cards and a variable named `count` is initialized to 52 as well. The `generateDeck` method is used to create the deck of cards and fill the deck array with 52 cards. The `ShuffleDeck` method is used to shuffle the cards in the deck array. The `main` method is where the game is played. It initializes two arrays `playerCard` and `dealerCard` to store the cards dealt to the player and the dealer, respectively. It also initializes several variables such as `handSum`, `houseSum`, `myAce`, `dAce`, `np`, and `nd` which will be used throughout the game.
+#Blackjack
+Blackjack is a popular card game that is played with a deck of 52 cards. The goal of the game is to beat the dealer by having a hand value that is 21 or as close to 21 as possible, without going over. The value of a hand is determined by the sum of the values of the individual cards. In this implementation of Blackjack, Aces are worth 1 or 11 points, face cards (King, Queen, and Jack) are worth 10 points, and all other cards are worth their face value (e.g. 2 of diamonds is worth 2 points).
 
-The `main` method also creates a `Scanner` object to read input from the user. The game starts by shuffling the deck of cards and then dealing two cards each to the player and the dealer. The `giveCard` method is used to deal a card from the top of the deck array to the player or the dealer. The `isAce` method is used to check if the card dealt is an Ace, and the `handCount` method is used to calculate the value of the card dealt. The value of the player's and dealer's hands are calculated and stored in the variables `handSum` and `houseSum`, respectively.
+##How to run the code
+To run the Blackjack code, you will need to have a Java compiler installed on your computer. You can then compile and run the code by using the following commands:
 
-The player is then given the option to "hit" or "stand", meaning they can either choose to receive another card or keep their current hand. If the player decides to "hit", they are dealt another card and the value of their hand is updated. If the value of the player's hand exceeds 21 and they have an Ace, the value of the Ace is reduced from 11 to 1 to prevent the player from busting (going over 21). This process continues until the player decides to "stand" or until their hand reaches a value of 21.
+`javac Blackjack.java`  //compile the code
+`java Blackjack`  //run the code
 
-After the player's turn, the dealer reveals their second card and begins their turn. If the value of the dealer's hand is less than 16, the dealer is required to "hit" and receive another card until their hand reaches a value of at least 17. The value of the dealer's hand is updated after each card is dealt. If the value of the dealer's hand exceeds 21 and they have an Ace, the value of the Ace is reduced from 11 to 1 to prevent the dealer from busting.
+##How to play the game
+When the game starts, you will be dealt two cards and the dealer will be dealt two cards as well, with one of the dealer's cards faced down. The value of your hand and the value of the dealer's visible card will be displayed. You will then be given the option to "hit" or "stand". If you choose to "hit", you will receive another card and the value of your hand will be updated. If you choose to "stand", your turn will end and the dealer will reveal their second card and begin their turn.
 
-After both the player and dealer have completed their turns, the `displayHeck` method is used to display the cards in the player's and dealer's hands, and the `result` method is used to determine the outcome of the game based on the values of the player's and dealer's hands. The game is then over and the `Scanner` object is closed.
+The dealer is required to "hit" if the value of their hand is less than 17 and "stand" if the value of their hand is 17 or higher. The value of the dealer's hand will be updated after each card is dealt. If the value of the dealer's hand exceeds 21 and they have an Ace, the value of the Ace will be reduced from 11 to 1 to prevent the dealer from busting.
+
+After both the player and dealer have completed their turns, the outcome of the game will be determined based on the values of their hands. If your hand is worth more than the dealer's hand or the dealer busts, you win. If your hand is worth less than the dealer's hand or you bust, you lose. If your hand is worth the same as the dealer's hand, the game is a draw.
+
+After the game is over, you will be asked if you want to continue playing. If you choose to continue, a new game will start with a shuffled deck of cards. If you choose to stop playing, the program will end.
+
+I hope you enjoy playing Blackjack!
+
+
+
