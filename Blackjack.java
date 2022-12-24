@@ -4,24 +4,33 @@ public class Blackjack{
     
     static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
-    
+    static double bal;
+    static double oribal;
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
 
         System.out.println("How many rounds do you want to play");
         int round = sc.nextInt();
+
         double[][] score = new double[2][round];
 
-        for(int game = 0; game < round; game++){ 
+        bal = Math.floor((round * 100) - (round - 3) * 6.5);
+        oribal = bal;
+        for(int game = 0; game < round && bal > 0; game++){ 
             
             System.out.printf("\nGame #%d\n", game + 1);
-
             String[] playerCard = new String[14];
             String[] dealerCard = new String[14];
-            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
+            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2;
+            double bet;
             //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
             
+            do{
+                System.out.printf("Your wallet is $%.2f\nEnter bet: ", bal);
+                bet = sc.nextDouble();
+            }while(bet <= 0 && bet > bal);
+
             generateDeck();
             ShuffleDeck();  //The cards are shuffle at the beginning of the game
         
@@ -60,6 +69,7 @@ public class Blackjack{
                 }
     
                 np++;
+                System.out.println("------------------------------");
             }
     
             //Dealer finally reveal his hand after the player's round ended
@@ -96,12 +106,12 @@ public class Blackjack{
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             
             result(handSum, houseSum, score, np, game);
+            countBal(score[0][game], bet);
             count = 52;
             
         }
 
         tallyScore(score, round);
-
         sc.close();
             
     }
@@ -229,6 +239,20 @@ public class Blackjack{
             score[0][g] = -1;
             score[1][g] = 1;
         }
+    }
+
+    public static void countBal(double point, double bet){
+        System.out.printf("Your starting money: $%.2f\n", oribal);
+        System.out.printf("Your previous balance: $%.2f\n", bal);
+
+        if(point > 0)
+            bal += (point - 1) * bet;
+
+        else if(point <= 0)
+            bal += point * bet;
+        
+        System.out.printf("Your curent balance: $%.2f\n", bal);
+        return;
     }
 
     public static boolean isAce( String card) {
