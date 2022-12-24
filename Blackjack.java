@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Blackjack {
+public class Blackjack{
     
     static String[] deck = {"HA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", 
         "DA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", 
@@ -19,8 +19,9 @@ public class Blackjack {
         
         for(int game = 1; game <= round; game++){
             
+            sleep(3);
             if(round > 1)
-                System.out.printf("\nGame %d,\n", game);
+                System.out.printf("\nGame #%d\n", game);
             
             String[] playerCard = new String[14];
             String[] dealerCard = new String[14];
@@ -49,6 +50,8 @@ public class Blackjack {
             System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
             System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
 
+
+            sleep(3);
             //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
 
             while(handSum != 21 && Hit()){
@@ -70,7 +73,7 @@ public class Blackjack {
 
             //Dealer finally reveal his hand after the player's round ended
             System.out.printf("\nDealer's cards: %s %s\n", dealerCard[0], dealerCard[1]);
-
+            sleep(2);
             //As per rule, if the dealer's hand is less than 16
             //the dealer is obligated to take another card until its hand reach at least 17
             if(houseSum <= 16)
@@ -89,24 +92,34 @@ public class Blackjack {
                 }
 
                 nd++;
+                sleep(2);
             }
 
             //Show the total value for Player hand and the Dealer Hands
-
+            sleep(4);
             System.out.printf("\n\nPlayer's hand: ");
             displayHand(playerCard, np);
             System.out.printf("\nPlayer total = %d\n" ,handSum);
-
+            sleep(4);
             System.out.printf("\nDealer's hand: ");
             displayHand(dealerCard, nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
-
+            sleep(4);
             result(handSum, houseSum);
-            
+
             System.out.println("------------------------------");
         }
 
         sc.close();
+    }
+
+    private static void sleep(double s){
+
+        long ns = (long) s * 1000000000;
+        long t = 0;
+        while(t < ns){
+            t++;
+        }
     }
 
     public static void ShuffleDeck(){
@@ -155,7 +168,7 @@ public class Blackjack {
     }
 
     public static boolean Hit(){
-
+        sleep(1);
         int opt;
         Scanner sc = new Scanner(System.in);
         System.out.printf("\nDo you want to hit\n");
@@ -182,6 +195,7 @@ public class Blackjack {
 
         for(int i = 0; i < num; i++){
             System.out.printf("%s ", cards[i]);
+            sleep(1);
         }
     }
 
