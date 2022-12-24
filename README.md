@@ -19,7 +19,7 @@ After both the player and dealer have completed their turns, the outcome of the 
 After the game is over, you will be asked if you want to continue playing. If you choose to continue, a new game will start with a shuffled deck of cards. If you choose to stop playing, the program will end.
 
 ##### Sample Run (in VS Code version)
-![Sample Run](https://media.discordapp.net/attachments/954699219485212712/1056126650250698832/image.png?width=452&height=662)
+![Sample Run](https://media.discordapp.net/attachments/954699219485212712/1056127879806718002/image.png)
 ![Sample blkjk](https://media.discordapp.net/attachments/954699219485212712/1056123724379721818/image.png)
 ![Sample bust](https://media.discordapp.net/attachments/954699219485212712/1056124784125153350/image.png)
 
