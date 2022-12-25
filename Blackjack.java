@@ -150,7 +150,7 @@ public class Blackjack{
             case 'J':
             case 'Q':
             case 'K': val =10; break;
-            default: val = (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
+            default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
                 break;
         }
         
