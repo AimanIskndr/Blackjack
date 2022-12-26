@@ -1,39 +1,30 @@
 import java.util.Scanner;
 
-public class Blackjack{
+public class protoBlkJk{
     
     static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
-    static double bal;
-    static double oribal;
+    
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
+        double bal = 1600;
 
-        System.out.println("How many rounds do you want to play");
-        int round = sc.nextInt();
-
-        double[][] score = new double[2][round];
-
-        bal = Math.floor((round * 100) - (round - 3) * 6.5);
-        oribal = bal;
-        for(int game = 0; game < round && bal > 0; game++){ 
+        while(bal > 0){  //infinite loop
             
-            System.out.printf("\nGame #%d\n", game + 1);
             String[] playerCard = new String[14];
             String[] dealerCard = new String[14];
-            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2;
-            double bet;
+            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
             //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
             
-            do{
-                System.out.printf("Your wallet is $%.2f\nEnter bet: ", bal);
-                bet = sc.nextDouble();
-            }while(bet <= 0 && bet > bal);
-
             generateDeck();
             ShuffleDeck();  //The cards are shuffle at the beginning of the game
-        
+            double bet;
+            do{
+                System.out.printf("\nYour wallet is $%.2f\nEnter bet: ", bal);
+                bet = sc.nextDouble();
+            }while(bet <= 0 || bet > bal);
+
             for(int i = 0; i < 2; i++){  
             
                 playerCard[i] = giveCard();
@@ -49,7 +40,7 @@ public class Blackjack{
                 houseSum += handCount(dealerCard[i].charAt(1));
             }
     
-            System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
+            System.out.printf("\nPlayer's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
             System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
             
             //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
@@ -69,7 +60,6 @@ public class Blackjack{
                 }
     
                 np++;
-                System.out.println("------------------------------");
             }
     
             //Dealer finally reveal his hand after the player's round ended
@@ -91,7 +81,7 @@ public class Blackjack{
                     houseSum = handCount(houseSum);
                     dAce--;
                 }
-
+    
                 nd++;
             }
     
@@ -105,13 +95,32 @@ public class Blackjack{
             displayDeck(dealerCard, nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             
-            result(handSum, houseSum, score, np, game);
-            countBal(score[0][game], bet);
-            count = 52;
+            bal += result(handSum, houseSum, np, bet);
             
+            if(bal == 0)
+                break;
+
+            System.out.println("Do you want to continue playing? (yes/no)");
+            String answer = sc.next();
+
+            if(answer.charAt(0) == 'y' || answer.charAt(0) == 'Y'){
+                count = 52;
+                continue;
+            }
+
+            else
+                break;
         }
 
-        tallyScore(score, round);
+        if(bal > 1600)
+            System.out.printf("\nYou gained $%.2f",  (bal - 1600));
+
+        else if(bal < 1600)
+            System.out.printf("\nYou lost $%.2f",  (1600 - bal));
+
+        else
+            System.out.println("\nYou dont really gain or lose anything");
+
         sc.close();
             
     }
@@ -159,8 +168,8 @@ public class Blackjack{
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q':
-            case 'K': val =10; break;
-            default: val = (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
+            case 'K': val = 10; break;
+            default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
                 break;
         }
         
@@ -196,64 +205,48 @@ public class Blackjack{
         return false;
     }
 
-    public static void result(int playerHand, int dealerHand, double[][] score, int nc, int g) {
+    public static double result(int playerHand, int dealerHand, int nc, double bet) {
         //Compared the player hand and the dealer hand and print out the result
+        double Return = 0;
         if(playerHand == 21 && dealerHand != 21 && nc == 2){
             System.out.println("Blackjack!\n");
-            score[0][g] = 2.5;
-            score[1][g] = -1.5;
+            Return = 1.5 * bet;
         }
 
         else if(dealerHand > 21 && playerHand > 21){
             System.out.println("You both bust.");
-            score[0][g] = 1;
-            score[1][g] = 0;
+            Return = 0 * bet;
         }
 
         else if(dealerHand > 21 && playerHand <= 21){
-            System.out.println("You won, the dealer bust.");
-            score[0][g] = 2;
-            score[1][g] = -1;
+            System.out.println("You win, the dealer bust.");
+            Return = 1 * bet;
         }
 
         else if(dealerHand <= 21 && playerHand > 21){
             System.out.println("You bust");
-            score[0][g] = -1;
-            score[1][g] = 1;
+            Return = -1 * bet;
         }
 
         else if(dealerHand == playerHand){
             System.out.println("Game ended with a tie");
-            score[0][g] = 1;
-            score[1][g] = 0;
+            Return =  0 * bet;
         }
 
         else if(((playerHand > dealerHand) && playerHand <= 21) || playerHand == 21 && dealerHand != 21){
-            System.out.println("You won!");
-            score[0][g] = 2;
-            score[1][g] = -1;
+            System.out.println("You win!");
+            Return = 1 * bet;
         }
 
         else if((playerHand < dealerHand) && dealerHand <= 21){
-            System.out.println("You lost.");
-            score[0][g] = -1;
-            score[1][g] = 1;
+            System.out.println("You lose.");
+            Return = -1 * bet;
         }
+
+        System.out.printf("Return: %.2f\n", Return);
+        return Return;
     }
 
-    public static void countBal(double point, double bet){
-        System.out.printf("Your starting money: $%.2f\n", oribal);
-        System.out.printf("Your previous balance: $%.2f\n", bal);
-
-        if(point > 0)
-            bal += (point - 1) * bet;
-
-        else if(point <= 0)
-            bal += point * bet;
-        
-        System.out.printf("Your curent balance: $%.2f\n", bal);
-        return;
-    }
 
     public static boolean isAce( String card) {
         if (card.charAt(1)=='A'){
@@ -267,19 +260,5 @@ public class Blackjack{
         for(int i = 0; i < num; i++){
             System.out.printf("%s ", cards[i]);
         }
-    }
-
-    private static void tallyScore(double[][] score, int r){
-        
-        int playerScore = 0;
-        int dealerScore = 0;
-
-        for(int i = 0; i < r; i++){
-            playerScore += score[0][i];
-            dealerScore += score[1][i];
-        }
-
-        System.out.println("\nPlayer's score: " + playerScore);
-        System.out.println("Dealer's score: " + dealerScore);
     }
 }
