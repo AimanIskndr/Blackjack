@@ -13,15 +13,21 @@ public class Blackjack{
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
-        
-        System.out.print("How many rounds do you want to play?: ");
-        int round = sc.nextInt();
+        double score = 0;
+        int round;
+
+        do{
+            System.out.print("How many rounds do you want to play?: ");
+            round = sc.nextInt();
+
+            if(round <= 0)
+                System.out.println("That is not possible");
+
+        }while(round <= 0);
         
         for(int game = 1; game <= round; game++){
             
-            sleep(3);
-            if(round > 1)
-                System.out.printf("\nGame #%d\n", game);
+            System.out.printf("\nGame #%d\n", game);
             
             String[] playerCard = new String[14];
             String[] dealerCard = new String[14];
@@ -50,10 +56,7 @@ public class Blackjack{
             System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
             System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
 
-
-            sleep(3);
             //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
-
             while(handSum != 21 && Hit()){
 
                 playerCard[np] = giveCard();
@@ -73,7 +76,7 @@ public class Blackjack{
 
             //Dealer finally reveal his hand after the player's round ended
             System.out.printf("\nDealer's cards: %s %s\n", dealerCard[0], dealerCard[1]);
-            sleep(2);
+
             //As per rule, if the dealer's hand is less than 16
             //the dealer is obligated to take another card until its hand reach at least 17
             if(houseSum <= 16)
@@ -92,34 +95,25 @@ public class Blackjack{
                 }
 
                 nd++;
-                sleep(2);
             }
 
             //Show the total value for Player hand and the Dealer Hands
-            sleep(4);
             System.out.printf("\n\nPlayer's hand: ");
             displayHand(playerCard, np);
             System.out.printf("\nPlayer total = %d\n" ,handSum);
-            sleep(4);
+
             System.out.printf("\nDealer's hand: ");
             displayHand(dealerCard, nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
-            sleep(4);
-            result(handSum, houseSum);
+            //Display results and tally the score of the player
+            score += result(handSum, houseSum, np);
 
             System.out.println("------------------------------");
         }
 
+        System.out.println("Game Played: " + round);
+        System.out.println("Total Score: " + score);
         sc.close();
-    }
-
-    private static void sleep(double s){
-
-        long ns = (long) s * 1000000000;
-        long t = 0;
-        while(t < ns){
-            t++;
-        }
     }
 
     public static void ShuffleDeck(){
@@ -168,7 +162,7 @@ public class Blackjack{
     }
 
     public static boolean Hit(){
-        sleep(1);
+
         int opt;
         Scanner sc = new Scanner(System.in);
         System.out.printf("\nDo you want to hit\n");
@@ -195,32 +189,47 @@ public class Blackjack{
 
         for(int i = 0; i < num; i++){
             System.out.printf("%s ", cards[i]);
-            sleep(1);
         }
     }
 
-    public static void result(int playerHand, int dealerHand) {
+    public static double result(int playerHand, int dealerHand, int nc) {
         //Compared the player hand and the dealer hand and print out the result
-        if(playerHand == 21 && dealerHand != 21)
-            System.out.println("Blackjack");
+        if(playerHand == 21 && dealerHand != 21 && nc == 2){
+            System.out.println("Blackjack!\n");
+            return 1.5;
+        }
 
-        else if(dealerHand > 21 && playerHand > 21)
+        else if(dealerHand > 21 && playerHand > 21){
             System.out.println("You both bust.");
+            return 0;
+        }
 
-        else if(dealerHand > 21 && playerHand <= 21)
-            System.out.println("You won, the dealer bust.");
+        else if(dealerHand > 21 && playerHand <= 21){
+            System.out.println("You win, the dealer bust.");
+            return 1;
+        }
 
-        else if(dealerHand <= 21 && playerHand > 21)
+        else if(dealerHand <= 21 && playerHand > 21){
             System.out.println("You bust");
+            return -1;
+        }
 
-        else if(dealerHand == playerHand)
+        else if(dealerHand == playerHand){
             System.out.println("Game ended with a tie");
+            return 0;
+        }
 
-        else if((playerHand > dealerHand) && playerHand <= 21)
-            System.out.println("You won!");
+        else if(((playerHand > dealerHand) && playerHand <= 21) || playerHand == 21 && dealerHand != 21){
+            System.out.println("You win!");
+            return 1;
+        }
 
-        else if((playerHand < dealerHand) && dealerHand <= 21)
-            System.out.println("You lost.");
+        else if((playerHand < dealerHand) && dealerHand <= 21){
+            System.out.println("You lose.");
+            return -1;
+        }
+
+        return 0;
     }
 
     public static boolean isAce( String card) {
