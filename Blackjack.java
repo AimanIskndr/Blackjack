@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class protoBlkJk{
+public class Blackjack{
     
     static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
