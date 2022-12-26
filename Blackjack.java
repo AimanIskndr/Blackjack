@@ -29,9 +29,9 @@ public class Blackjack{
             
             System.out.printf("\nGame #%d\n", game);
             
-            String[] playerCard = new String[14];
-            String[] dealerCard = new String[14];
-            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2; 
+            String[][] cards = new String[2][15];
+            int p = 0, d = 1; // this is just a row index for the 2d array above since it is easier to read
+            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2;
             //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
 
             ShuffleDeck();  //The cards are shuffle at the beginning of the game
@@ -40,31 +40,31 @@ public class Blackjack{
 
             for(int i = 0; i < 2; i++){  
 
-                playerCard[i] = giveCard();
-                if(isAce(playerCard[i]))
+                cards[p][i] = giveCard();
+                if(isAce(cards[p][i]))
                     myAce++;
 
-                handSum += handCount(playerCard[i].charAt(1));
+                handSum += handCount(cards[p][i].charAt(1));
 
-                dealerCard[i] = giveCard();           
-                if(isAce(dealerCard[i]))
+                cards[d][i] = giveCard();           
+                if(isAce(cards[d][i]))
                     dAce++;
 
-                houseSum += handCount(dealerCard[i].charAt(1));
+                houseSum += handCount(cards[d][i].charAt(1));
             }
 
-            System.out.printf("Player's cards: %s %s", playerCard[0], playerCard[1]); //The two cards dealt for the player are shown to the player
-            System.out.printf("\nDealer's card: %s + ?\n", dealerCard[0]); //Only the first dealer card is shown to the player while the second card is faced down.
+            System.out.printf("Player's cards: %s %s", cards[p][0], cards[p][1]); //The two cards dealt for the player are shown to the player
+            System.out.printf("\nDealer's card: %s + ?\n", cards[d][0]); //Only the first dealer card is shown to the player while the second card is faced down.
 
             //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
             while(handSum != 21 && Hit()){
 
-                playerCard[np] = giveCard();
-                if(isAce(playerCard[np]))
+                cards[p][np] = giveCard();
+                if(isAce(cards[p][np]))
                     myAce++;
 
-                System.out.println("You are dealt " + playerCard[np]);
-                handSum += handCount(playerCard[np].charAt(1));
+                System.out.println("You are dealt " + cards[p][np]);
+                handSum += handCount(cards[p][np].charAt(1));
 
                 while(handSum > 21 && myAce != 0){
                     handSum = handCount(handSum);
@@ -75,7 +75,7 @@ public class Blackjack{
             }
 
             //Dealer finally reveal his hand after the player's round ended
-            System.out.printf("\nDealer's cards: %s %s\n", dealerCard[0], dealerCard[1]);
+            System.out.printf("\nDealer's cards: %s %s\n", cards[d][0], cards[d][1]);
 
             //As per rule, if the dealer's hand is less than 16
             //the dealer is obligated to take another card until its hand reach at least 17
@@ -83,12 +83,12 @@ public class Blackjack{
                 System.out.print("Dealer take card(s): ");
 
             while(houseSum <= 16){
-                dealerCard[nd] = giveCard();
-                if(isAce(dealerCard[nd]))
+                cards[d][nd] = giveCard();
+                if(isAce(cards[d][nd]))
                     dAce++;
 
-                houseSum += handCount(dealerCard[nd].charAt(1));
-                System.out.print(dealerCard[nd] + " ");
+                houseSum += handCount(cards[d][nd].charAt(1));
+                System.out.print(cards[d][nd] + " ");
                 while(houseSum > 21 && dAce != 0){
                     houseSum = handCount(houseSum);
                     dAce--;
@@ -99,11 +99,11 @@ public class Blackjack{
 
             //Show the total value for Player hand and the Dealer Hands
             System.out.printf("\n\nPlayer's hand: ");
-            displayHand(playerCard, np);
+            displayHand(cards[p], np);
             System.out.printf("\nPlayer total = %d\n" ,handSum);
 
             System.out.printf("\nDealer's hand: ");
-            displayHand(dealerCard, nd);
+            displayHand(cards[d], nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             //Display results and tally the score of the player
             score += result(handSum, houseSum, np);
