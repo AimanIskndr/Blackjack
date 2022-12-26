@@ -106,7 +106,7 @@ public class Blackjack{
             displayHand(cards[d], nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             //Display results and tally the score of the player
-            score += result(handSum, houseSum, np);
+            score += determineWinner(handSum, houseSum, np);
 
             System.out.println("------------------------------");
         }
@@ -148,8 +148,8 @@ public class Blackjack{
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q':
-            case 'K': val =10; break;
-            default: val = (int) cVal - 48; //lookup ASCII if this doesn't make sense to you
+            case 'K': val = 10; break;
+            default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
                 break;
         }
         
@@ -157,42 +157,46 @@ public class Blackjack{
     }
 
     public static int handCount(int sum){
-        
+        //recount the cards sum by subtracting changing ace value from 11 to 1
         return sum - 10;
     }
 
-    public static boolean Hit(){
+    public static boolean Hit(){// prompt the user if they want to hit or stand during the player round
 
-        int opt;
+        String opt;
         Scanner sc = new Scanner(System.in);
-        System.out.printf("\nDo you want to hit\n");
-        System.out.println("0. Stand    1. Hit");
 
         do{
-            opt = sc.nextInt();
-
-            switch (opt) {
-                case 1: return true;
-                case 0: return false;
-                default:
+            System.out.println("\nDo you want to hit");
+            System.out.println("> Stand    > Hit");
+            opt = sc.next();
+            
+            switch (opt.charAt(0)) {
+                case 'h':
+                case 'H': 
+                    return true;
+                case 'S':
+                case 's': 
+                    return false;
+                default: System.out.println("Invalid option!");
                     continue;
             }
 
-        }while(opt != 1 || opt != 0);
+        }while(opt != "hit" || opt != "stand");
         
         sc.close();
 
         return false;
     }
 
-    private static void displayHand(String[] cards, int num){
-
+    private static void displayHand(String[] cards, int num){ //Display their deck once the game end
+        //num = number of card
         for(int i = 0; i < num; i++){
             System.out.printf("%s ", cards[i]);
         }
     }
 
-    public static double result(int playerHand, int dealerHand, int nc) {
+    public static double determineWinner(int playerHand, int dealerHand, int nc) {
         //Compared the player hand and the dealer hand and print out the result
         if(playerHand == 21 && dealerHand != 21 && nc == 2){
             System.out.println("Blackjack!\n");
@@ -232,7 +236,7 @@ public class Blackjack{
         return 0;
     }
 
-    public static boolean isAce( String card) {
+    public static boolean isAce( String card){ //Check if the player card is ace or not
         if (card.charAt(1)=='A'){
             return true;
             }
