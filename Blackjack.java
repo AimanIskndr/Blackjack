@@ -238,6 +238,14 @@ public class Blackjack{
         return 0;
     }
 
+    /*public static double tallyScore(double[] score){
+        
+        for(i, r):
+            sum += score[i]
+
+        return sum;  
+    }*/
+    
     /*public static void showStats(double[] score, int r){ 
 
         int win = 0, blackjack = 0, tie = 0, lose = 0;
