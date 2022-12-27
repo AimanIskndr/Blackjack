@@ -13,9 +13,7 @@ public class Blackjack{
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
-        double score = 0;
         int round;
-
         do{
             System.out.print("How many rounds do you want to play?: ");
             round = sc.nextInt();
@@ -24,6 +22,8 @@ public class Blackjack{
                 System.out.println("That is not possible");
 
         }while(round <= 0);
+
+        double score = 0; //change to array eg. `double[] score = new double[round];`
         
         for(int game = 1; game <= round; game++){
             
@@ -106,13 +106,15 @@ public class Blackjack{
             displayHand(cards[d], nd);
             System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
             //Display results and tally the score of the player
-            score += determineWinner(handSum, houseSum, np);
+            score += determineWinner(handSum, houseSum, np); //determineWinner(handsum, houseSum, score, game);
 
             System.out.println("------------------------------");
         }
 
-        System.out.println("Game Played: " + round);
-        System.out.println("Total Score: " + score);
+        System.out.println("\nGame Played: " + round);
+        System.out.println("Total Score: " + score); //System.out.println("Total Score: " + tallyScore(score));
+        //showStats(score, round);
+        
         sc.close();
     }
 
@@ -195,12 +197,12 @@ public class Blackjack{
             System.out.printf("%s ", cards[i]);
         }
     }
-
-    public static double determineWinner(int playerHand, int dealerHand, int nc) {
+    //public static void determineWinner(int playerHand, int dealerHand, int nc, double[] score, int i){
+    public static double determineWinner(int playerHand, int dealerHand, int nc){
         //Compared the player hand and the dealer hand and print out the result
         if(playerHand == 21 && dealerHand != 21 && nc == 2){
             System.out.println("Blackjack!\n");
-            return 1.5;
+            return 1.5; //score[i] = 1.5
         }
 
         else if(dealerHand > 21 && playerHand > 21){
@@ -235,6 +237,21 @@ public class Blackjack{
 
         return 0;
     }
+
+    /*public static void showStats(double[] score, int r){ 
+
+        int win = 0, blackjack = 0, tie = 0, lose = 0;
+
+        for(i, r):
+            switch(score[i]){
+                case 1.5: blackjack++; win++;
+                    break;
+                case...
+            }
+        }
+
+        sysout(displayStats) -> W(*)/D/L
+    } */
 
     public static boolean isAce( String card){ //Check if the player card is ace or not
         if (card.charAt(1)=='A'){
