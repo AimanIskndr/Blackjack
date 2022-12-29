@@ -1,15 +1,11 @@
 import java.util.Scanner;
+import java.io.*;
 
 public class Blackjack{
     
-    static String[] deck = {"HA", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "HJ", "HQ", "HK", 
-        "DA", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "DJ", "DQ", "DK", 
-        "CA", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "CJ", "CQ", "CK", 
-        "SA", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "SJ", "SQ", "SK"};
-    // Due to the limitation of the netbeans compiler we have to represent the suit as a character (this is why VS code better /s)
-    // H = Heart, D = Diamond, C = Clover/Club S = Spade
+    static String[] deck = new String[52];
     static int count = 52; //one deck have 52 cards. 4 suits x 13 ranks
-    
+
     public static void main(String[] args){
         
         Scanner sc = new Scanner(System.in);
@@ -22,6 +18,8 @@ public class Blackjack{
                 System.out.println("That is not possible");
 
         }while(round <= 0);
+
+        readDeck();
 
         double[] score = new double[round]; 
         
@@ -119,6 +117,22 @@ public class Blackjack{
         sc.close();
     }
 
+    public static void readDeck(){
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("deck.txt"))) {
+        String card;
+
+        int i = 0;
+            while ((card = reader.readLine()) != null) {
+                deck[i] = card;
+                i++;
+            }
+        }catch (IOException e){
+            System.out.println("Error reading file: " + e.getMessage());
+            }
+    }
+
+
     public static void ShuffleDeck(){
 
         //Use monkey sort to shuffle the deck
@@ -131,29 +145,22 @@ public class Blackjack{
         }
     }
     
-    public static String giveCard() {
-        //Deal the card from the top of the stack
+    private static String giveCard() {
         count--;
         return deck[count];
     }
     
     public static int handCount(char cVal){
         int val;
-        /*
-        Number card (2-10) value are taken literally from the card.
-        All court card (or face card which ever you prefer to call them) are counted as 10
-        Court card = Jack, Queen and King
-        Ace is a wildcard, it can be either counted as 11 or 1
-        but by default, Ace is always counted as 11.
-        */
+
         switch (cVal){
-            case 'A': val = 11; break;
+            case 'A': val = 11; break; //Ace can be counted as 11 or 1 but by default, Ace is always counted as 11.
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
-            case 'Q':
-            case 'K': val = 10; break;
+            case 'Q': //All court card (or face card which ever you prefer to call them) are counted as 10
+            case 'K': val = 10; break; //Court card = Jack, Queen and King
             default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
-                break;
+                break;  //Number card (2-10) value are taken literally from the card.
         }
         
         return val;
@@ -264,13 +271,12 @@ public class Blackjack{
             }
         }
         
-
-        System.out.println("\nWin\tBlackJack\tDraw\tLoss");
-        System.out.printf("%d\t%d\t\t%d\t%d", win, blackjack, tie, lose);
+        System.out.println("\nBlackJack\tWin\tDraw\tLoss");
+        System.out.printf("%d\t\t%d\t%d\t%d", blackjack, win, tie, lose);
     }
 
     public static boolean isAce( String card){ //Check if the player card is ace or not
-        if (card.charAt(1)=='A'){
+        if (card.charAt(1) == 'A'){
             return true;
             }
         return false;
