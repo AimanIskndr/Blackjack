@@ -153,6 +153,15 @@ public class Blackjack{
         count--;
         return deck[count];
     }
+
+    public static void sleep(double s) {
+        long ms = (long) s * 1000;
+        try{
+            Thread.sleep(ms);
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+          }
+    }
     
     public static int handCount(char cVal){
         int val;
