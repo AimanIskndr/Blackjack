@@ -45,5 +45,9 @@ IDE: Some popular Java IDEs include [Eclipse](https://www.eclipse.org/downloads/
 
 I hope you enjoy playing Blackjack!
 
+#### Remarks
+
+For this program to work, you have to also download the deck.txt file and put in the same project folder as your Blackjack.java file
+
 <sub> Consider checking the [VSCode version](https://github.com/AimanIskndr/Blackjack/tree/VSCode-ver) instead of this version if you use Visual Studio Code </sub>
 
