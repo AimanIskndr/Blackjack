@@ -96,16 +96,17 @@ public class Blackjack{
             }
 
             //Show the total value for Player hand and the Dealer Hands
-            System.out.printf("\n\nPlayer's hand: ");
+            System.out.print("\n\nPlayer's hand: ");
             displayHand(cards[p], np);
             System.out.printf("\nPlayer total = %d\n" ,handSum);
 
-            System.out.printf("\nDealer's hand: ");
+            System.out.print("\nDealer's hand: ");
             displayHand(cards[d], nd);
-            System.out.printf("\nDealer total = %d\n\n" ,houseSum); 
+            System.out.printf("\nDealer total = %d\n\n" ,houseSum);
             //Display results and tally the score of the player
             determineWinner(handSum, houseSum, np, score, game); 
 
+            count = 52;
             System.out.println("------------------------------");
         }
 
@@ -162,7 +163,7 @@ public class Blackjack{
             default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
                 break;  //Number card (2-10) value are taken literally from the card.
         }
-        
+
         return val;
     }
 
@@ -247,8 +248,8 @@ public class Blackjack{
     }
 
     public static double tallyScore(double[] score){
-        double sum=0;
-        for(int i=0; i<score.length; i++){
+        double sum = 0;
+        for(int i = 0; i < score.length; i++){
             sum += score[i];
         }            
         return sum;  
@@ -271,8 +272,8 @@ public class Blackjack{
             }
         }
         
-        System.out.println("\nBlackJack\tWin\tDraw\tLoss");
-        System.out.printf("%d\t\t%d\t%d\t%d", blackjack, win, tie, lose);
+        System.out.println("\nBlkj\tWin\tDraw\tLoss");
+        System.out.printf("%d\t%d\t%d\t%d\n", blackjack, win, tie, lose);
     }
 
     public static boolean isAce( String card){ //Check if the player card is ace or not
