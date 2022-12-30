@@ -77,9 +77,12 @@ public class Blackjack{
 
             //As per rule, if the dealer's hand is less than 16
             //the dealer is obligated to take another card until its hand reach at least 17
+            if (dAce==2)
+                   handCount(houseSum);
+            
             if(houseSum <= 16)
                 System.out.print("Dealer take card(s): ");
-
+                             
             while(houseSum <= 16){
                 cards[d][nd] = giveCard();
                 if(isAce(cards[d][nd]))
