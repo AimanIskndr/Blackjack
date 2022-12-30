@@ -16,9 +16,9 @@ IDE: Some popular Java IDEs include [Eclipse](https://www.eclipse.org/downloads/
 2. Open the code in your chosen IDE.
 3. Compile and run the code.
 
-  * `javac Blackjack.java`
+   `javac Blackjack.java`
 
-  * `java Blackjack`
+   `java Blackjack`
 
 4. Follow the prompts in the terminal to play the game.
 
@@ -39,13 +39,13 @@ IDE: Some popular Java IDEs include [Eclipse](https://www.eclipse.org/downloads/
 8. If there are more rounds to play, the game will start the next round. If you have played the desired number of rounds, the game will end.
 9. The program will output the final overall score and the statistics of the game (win, blackjack, lose, or draw)
 
-##### Sample Run (in [VS Code version](https://github.com/AimanIskndr/Blackjack/tree/VSCode-ver))
-![Sample Run](https://media.discordapp.net/attachments/954699219485212712/1057681745060827166/Sample_run.png)
-![Sample blkjk](https://media.discordapp.net/attachments/954699219485212712/1057681744683335770/Sample_run_2.png)
+##### Sample Run
+![Sample Run](https://media.discordapp.net/attachments/954699219485212712/1058198956380794941/Capture.PNG)
+![Sample blkjk](https://media.discordapp.net/attachments/954699219485212712/1058195789979078666/Screenshot_2022-12-30_093158.png)
 
 I hope you enjoy playing Blackjack!
 
-#### Remarks
+### Remarks
 
 For this program to work, you have to also download the deck.txt file and put in the same project folder as your Blackjack.java file
 
