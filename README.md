@@ -18,7 +18,7 @@ IDE: Some popular Java IDEs include [Eclipse](https://www.eclipse.org/downloads/
 
    `javac Blackjack.java`
 
-   `java Blackjack`
+   `java Blackjack.java`
 
 4. Follow the prompts in the terminal to play the game.
 
