@@ -4,7 +4,7 @@ Blackjack is a popular card game that is played with a deck of 52 cards. The goa
 This Java code simulates a game of Blackjack. The code shuffles a deck of cards, deals two cards to the player and two cards to the dealer, and allows the player to "hit" or "stand" until they decide to stand or until they bust (go over 21). The dealer will then reveal their hand and will "hit" or "stand" according to a set of rules. The game will output the result of the round (win, lose, or draw) and the final score for each hand. The game can be played for a specified number of rounds.
 
 ## Getting Started
-To run this code, you will need to have the Java Development Kit (JDK) and a Java Integrated Development Environment (IDE) installed on your machine. The code was developed and tested using Visual Studio Code, but any Java IDE should work.
+To run this code, you will need to have the Java Development Kit (JDK) and a Java Integrated Development Environment (IDE) installed on your machine. The code was developed and tested using Visual Studio Code and IntelliJ IDEA, but any Java IDE should work.
 
 ### Prerequisites
 JDK: You can download the latest version of the JDK [here](https://www.oracle.com/java/technologies/downloads/).
