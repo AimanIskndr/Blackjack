@@ -10,6 +10,7 @@ public class Blackjack{
         
         Scanner sc = new Scanner(System.in);
         int round;
+
         do{
             System.out.print("How many rounds do you want to play?: ");
             round = sc.nextInt();
@@ -18,14 +19,14 @@ public class Blackjack{
                 System.out.println("That is not possible");
 
         }while(round <= 0);
-
-        readDeck();
-
+        
         double[] score = new double[round]; 
+        
+        readDeck(); //load the deck from the deck.txt file
         
         for(int game = 0; game < round; game++){
             
-            System.out.printf("\nGame #%d\n", game+1);
+            System.out.printf("\nGame #%d\n", game+1); sleep(0.7);
             
             String[][] cards = new String[2][15];
             int p = 0, d = 1; // this is just a row index for the 2d array above since it is easier to read
@@ -35,7 +36,6 @@ public class Blackjack{
             ShuffleDeck();  //The cards are shuffle at the beginning of the game
 
             //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
-
             for(int i = 0; i < 2; i++){  
 
                 cards[p][i] = giveCard();
@@ -50,9 +50,11 @@ public class Blackjack{
 
                 houseSum += handCount(cards[d][i].charAt(1));
             }
+            sleep(1);
 
             System.out.printf("Player's cards: %s %s", cards[p][0], cards[p][1]); //The two cards dealt for the player are shown to the player
             System.out.printf("\nDealer's card: %s + ?\n", cards[d][0]); //Only the first dealer card is shown to the player while the second card is faced down.
+            sleep(1.5);
 
             //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
             while(handSum != 21 && Hit()){
@@ -69,7 +71,8 @@ public class Blackjack{
                     myAce--;
                 }
 
-                np++;
+                np++; 
+                sleep(1);
             }
 
             //Dealer finally reveal his hand after the player's round ended
@@ -95,17 +98,19 @@ public class Blackjack{
                     dAce--;
                 }
 
-                nd++;
+                nd++; 
+                sleep(0.6);
             }
 
+            sleep(1.4);
             //Show the total value for Player hand and the Dealer Hands
             System.out.print("\n\nPlayer's hand: ");
-            displayHand(cards[p], np);
-            System.out.printf("\nPlayer total = %d\n" ,handSum);
+            displayHand(cards[p], np); sleep(1.4);
+            System.out.printf("\nPlayer total = %d\n" ,handSum); sleep(0.8);
 
             System.out.print("\nDealer's hand: ");
-            displayHand(cards[d], nd);
-            System.out.printf("\nDealer total = %d\n\n" ,houseSum);
+            displayHand(cards[d], nd); sleep(1.4);
+            System.out.printf("\nDealer total = %d\n\n" ,houseSum); sleep(0.8);
             //Display results and tally the score of the player
             determineWinner(handSum, houseSum, np, score, game); 
 
@@ -152,6 +157,15 @@ public class Blackjack{
     private static String giveCard() {
         count--;
         return deck[count];
+    }
+
+    public static void sleep(double s) {
+        long ms = (long) s * 1000;
+        try{
+            Thread.sleep(ms);
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+          }
     }
     
     public static int handCount(char cVal){
@@ -206,7 +220,7 @@ public class Blackjack{
     private static void displayHand(String[] cards, int num){ //Display their deck once the game end
         //num = number of card
         for(int i = 0; i < num; i++){
-            System.out.printf("%s ", cards[i]);
+            System.out.printf("%s ", cards[i]); 
         }
     }
     
@@ -247,7 +261,8 @@ public class Blackjack{
             score[i] =  -1;
         }
 
-         return;
+        sleep(0.42);
+        return;
     }
 
     public static double tallyScore(double[] score){
