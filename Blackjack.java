@@ -11,16 +11,18 @@ public class Blackjack{
         try (Scanner sc = new Scanner(System.in)) {
             
             int round = 0;
-            while(round <= 0) {
+            while(round <= 0){
                 try {
                     System.out.print("How many rounds do you want to play?: ");
                     round = sc.nextInt();
-                    
+
                     if(round < 1)
                         throw new IllegalArgumentException("That is not possible");
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
-                }catch (InputMismatchException e) {
+
+                } catch (IllegalArgumentException ex) {
+                    System.out.println(ex.getMessage());
+
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid input, please enter a number.");
                     sc.nextLine();
                 }
@@ -56,8 +58,8 @@ public class Blackjack{
 
                     houseSum += handCount(cards[d][i].charAt(1));
                 }
-                sleep(1);
-
+                sleep(1.0);
+                
                 System.out.printf("Player's cards: %s %s", cards[p][0], cards[p][1]); //The two cards dealt for the player are shown to the player
                 System.out.printf("\nDealer's card: %s + ?\n", cards[d][0]); //Only the first dealer card is shown to the player while the second card is faced down.
                 sleep(1.5);
@@ -78,7 +80,6 @@ public class Blackjack{
                     }
 
                     np++; 
-                    sleep(1);
                 }
 
                 //Dealer finally reveal his hand after the player's round ended
@@ -103,12 +104,12 @@ public class Blackjack{
                         houseSum = handCount(houseSum);
                         dAce--;
                     }
-
+                    
                     nd++; 
                     sleep(0.6);
                 }
 
-                sleep(1.4);
+                
                 //Show the total value for Player hand and the Dealer Hands
                 System.out.print("\n\nPlayer's hand: ");
                 displayHand(cards[p], np); sleep(1.4);
@@ -134,21 +135,18 @@ public class Blackjack{
     }
 
     public static void readDeck(){
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("deck.txt"))) {
-        String card;
-
-        int i = 0;
-            while ((card = reader.readLine()) != null) {
-                deck[i] = card;
+        try{
+            Scanner sc = new Scanner(new File("deck.txt"));
+            int i = 0;
+            while(sc.hasNextLine()){
+                deck[i] = sc.nextLine();
                 i++;
             }
         }catch (IOException e){
             System.out.println("Error reading file: " + e.getMessage());
-            }
+        }
     }
-
-
+    
     public static void ShuffleDeck(){
 
         //Use monkey sort to shuffle the deck
@@ -301,7 +299,7 @@ public class Blackjack{
         System.out.printf("%d\t%d\t%d\t%d\n", blackjack, win, tie, lose);
     }
 
-    public static boolean isAce( String card){ //Check if the player card is ace or not
+    public static boolean isAce( String card){
         if (card.charAt(1) == 'A'){
             return true;
             }
