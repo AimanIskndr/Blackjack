@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
 
 public class Blackjack{
@@ -8,122 +8,129 @@ public class Blackjack{
 
     public static void main(String[] args){
         
-        Scanner sc = new Scanner(System.in);
-        int round;
-
-        do{
-            System.out.print("How many rounds do you want to play?: ");
-            round = sc.nextInt();
-
-            if(round <= 0)
-                System.out.println("That is not possible");
-
-        }while(round <= 0);
-        
-        double[] score = new double[round]; 
-        
-        readDeck(); //load the deck from the deck.txt file
-        
-        for(int game = 0; game < round; game++){
+        try (Scanner sc = new Scanner(System.in)) {
             
-            System.out.printf("\nGame #%d\n", game+1); sleep(0.7);
-            
-            String[][] cards = new String[2][15];
-            int p = 0, d = 1; // this is just a row index for the 2d array above since it is easier to read
-            int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2;
-            //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
-
-            ShuffleDeck();  //The cards are shuffle at the beginning of the game
-
-            //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
-            for(int i = 0; i < 2; i++){  
-
-                cards[p][i] = giveCard();
-                if(isAce(cards[p][i]))
-                    myAce++;
-
-                handSum += handCount(cards[p][i].charAt(1));
-
-                cards[d][i] = giveCard();           
-                if(isAce(cards[d][i]))
-                    dAce++;
-
-                houseSum += handCount(cards[d][i].charAt(1));
-            }
-            sleep(1);
-
-            System.out.printf("Player's cards: %s %s", cards[p][0], cards[p][1]); //The two cards dealt for the player are shown to the player
-            System.out.printf("\nDealer's card: %s + ?\n", cards[d][0]); //Only the first dealer card is shown to the player while the second card is faced down.
-            sleep(1.5);
-
-            //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
-            while(handSum != 21 && Hit()){
-
-                cards[p][np] = giveCard();
-                if(isAce(cards[p][np]))
-                    myAce++;
-
-                System.out.println("You are dealt " + cards[p][np]);
-                handSum += handCount(cards[p][np].charAt(1));
-
-                while(handSum > 21 && myAce != 0){
-                    handSum = handCount(handSum);
-                    myAce--;
+            int round = 0;
+            while(round <= 0) {
+                try {
+                    System.out.print("How many rounds do you want to play?: ");
+                    round = sc.nextInt();
+                    
+                    if(round < 1)
+                        throw new IllegalArgumentException("That is not possible");
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                }catch (InputMismatchException e) {
+                    System.out.println("Invalid input, please enter a number.");
+                    sc.nextLine();
                 }
+            }
+            
+            double[] score = new double[round]; 
+            
+            readDeck(); //load the deck from the deck.txt file
+            
+            for(int game = 0; game < round; game++){
+                
+                System.out.printf("\nGame #%d\n", game+1); sleep(0.7);
+                
+                String[][] cards = new String[2][15];
+                int p = 0, d = 1; // this is just a row index for the 2d array above since it is easier to read
+                int handSum = 0, houseSum = 0, myAce = 0, dAce = 0, np = 2, nd = 2;
+                //np = number of player's cards, nd = number of dealer's card. By default it is always at least 2
 
-                np++; 
+                ShuffleDeck();  //The cards are shuffle at the beginning of the game
+
+                //The "dealer" dealt two cards for the player and the dealer at the beginning of the game
+                for(int i = 0; i < 2; i++){  
+
+                    cards[p][i] = giveCard();
+                    if(isAce(cards[p][i]))
+                        myAce++;
+
+                    handSum += handCount(cards[p][i].charAt(1));
+
+                    cards[d][i] = giveCard();           
+                    if(isAce(cards[d][i]))
+                        dAce++;
+
+                    houseSum += handCount(cards[d][i].charAt(1));
+                }
                 sleep(1);
-            }
 
-            //Dealer finally reveal his hand after the player's round ended
-            System.out.printf("\nDealer's cards: %s %s\n", cards[d][0], cards[d][1]);
+                System.out.printf("Player's cards: %s %s", cards[p][0], cards[p][1]); //The two cards dealt for the player are shown to the player
+                System.out.printf("\nDealer's card: %s + ?\n", cards[d][0]); //Only the first dealer card is shown to the player while the second card is faced down.
+                sleep(1.5);
 
-            //As per rule, if the dealer's hand is less than 16
-            //the dealer is obligated to take another card until its hand reach at least 17
-            if (dAce==2) //Check the extreme case where the dealer have been dealt two aces at the beginning of the game
-                   houseSum = handCount(houseSum);
-            
-            if(houseSum <= 16)
-                System.out.print("Dealer take card(s): ");
-                             
-            while(houseSum <= 16){
-                cards[d][nd] = giveCard();
-                if(isAce(cards[d][nd]))
-                    dAce++;
+                //If the total player's card is not 21 (not a blackjack) the player may decide to "hit" or "stand"
+                while(handSum != 21 && Hit()){
 
-                houseSum += handCount(cards[d][nd].charAt(1));
-                System.out.print(cards[d][nd] + " ");
-                while(houseSum > 21 && dAce != 0){
-                    houseSum = handCount(houseSum);
-                    dAce--;
+                    cards[p][np] = giveCard();
+                    if(isAce(cards[p][np]))
+                        myAce++;
+
+                    System.out.println("You are dealt " + cards[p][np]);
+                    handSum += handCount(cards[p][np].charAt(1));
+
+                    while(handSum > 21 && myAce != 0){
+                        handSum = handCount(handSum);
+                        myAce--;
+                    }
+
+                    np++; 
+                    sleep(1);
                 }
 
-                nd++; 
-                sleep(0.6);
+                //Dealer finally reveal his hand after the player's round ended
+                System.out.printf("\nDealer's cards: %s %s\n", cards[d][0], cards[d][1]);
+
+                //As per rule, if the dealer's hand is less than 16
+                //the dealer is obligated to take another card until its hand reach at least 17
+                if (dAce==2) //Check the extreme case where the dealer have been dealt two aces at the beginning of the game
+                       houseSum = handCount(houseSum);
+                
+                if(houseSum <= 16)
+                    System.out.print("Dealer take card(s): ");
+                                 
+                while(houseSum <= 16){
+                    cards[d][nd] = giveCard();
+                    if(isAce(cards[d][nd]))
+                        dAce++;
+
+                    houseSum += handCount(cards[d][nd].charAt(1));
+                    System.out.print(cards[d][nd] + " ");
+                    while(houseSum > 21 && dAce != 0){
+                        houseSum = handCount(houseSum);
+                        dAce--;
+                    }
+
+                    nd++; 
+                    sleep(0.6);
+                }
+
+                sleep(1.4);
+                //Show the total value for Player hand and the Dealer Hands
+                System.out.print("\n\nPlayer's hand: ");
+                displayHand(cards[p], np); sleep(1.4);
+                System.out.printf("\nPlayer total = %d\n" ,handSum); sleep(0.8);
+
+                System.out.print("\nDealer's hand: ");
+                displayHand(cards[d], nd); sleep(1.4);
+                System.out.printf("\nDealer total = %d\n\n" ,houseSum); sleep(0.8);
+                //Display results and tally the score of the player
+                determineWinner(handSum, houseSum, np, score, game); 
+
+                count = 52;
+                System.out.println("------------------------------");
             }
 
-            sleep(1.4);
-            //Show the total value for Player hand and the Dealer Hands
-            System.out.print("\n\nPlayer's hand: ");
-            displayHand(cards[p], np); sleep(1.4);
-            System.out.printf("\nPlayer total = %d\n" ,handSum); sleep(0.8);
-
-            System.out.print("\nDealer's hand: ");
-            displayHand(cards[d], nd); sleep(1.4);
-            System.out.printf("\nDealer total = %d\n\n" ,houseSum); sleep(0.8);
-            //Display results and tally the score of the player
-            determineWinner(handSum, houseSum, np, score, game); 
-
-            count = 52;
-            System.out.println("------------------------------");
+            System.out.println("\nGame Played: " + round);
+            double total = tallyScore(score);
+            System.out.println("Total Score: " + total); 
+            showStats(score);
+            
+            sc.close();
         }
-
-        System.out.println("\nGame Played: " + round);
-        double total = tallyScore(score);
-        System.out.println("Total Score: " + total); 
-        showStats(score);
-        
-        sc.close();
     }
 
     public static void readDeck(){
