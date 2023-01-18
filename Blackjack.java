@@ -151,7 +151,7 @@ public class Blackjack{
 
         //Use monkey sort to shuffle the deck
         for(int j = 0; j < 52; j++){
-            int randId = (int) (Math.random() * 52);
+            int randId = (int) (Math.random() * 51);
 
             String tempStr = deck[j];
             deck[j] = deck [randId];
