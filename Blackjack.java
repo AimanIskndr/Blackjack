@@ -173,16 +173,16 @@ public class Blackjack{
           }
     }
     
-    public static int handCount(char cVal){
+    public static int handCount(char rank){
         int val;
 
-        switch (cVal){
+        switch (rank){
             case 'A': val = 11; break; //Ace can be counted as 11 or 1 but by default, Ace is always counted as 11.
             case '1':                  //charAt(1) for (Suit)10 is 1
             case 'J':
             case 'Q': //All court card (or face card which ever you prefer to call them) are counted as 10
             case 'K': val = 10; break; //Court card = Jack, Queen and King
-            default: val = (int) cVal - '0'; //lookup ASCII if this doesn't make sense to you
+            default: val = (int) rank - '0'; //lookup ASCII if this doesn't make sense to you
                 break;  //Number card (2-10) value are taken literally from the card.
         }
 
